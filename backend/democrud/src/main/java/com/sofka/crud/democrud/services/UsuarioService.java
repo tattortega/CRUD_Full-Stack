@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,14 +59,14 @@ public class UsuarioService {
     }
 
     /**
-     * Método para obtener usuarios por prioridad
+     * Método para obtener usuarios por email
      *
-     * @param prioridad Integer
+     * @param email String
      * @return List
      */
     @Transactional(readOnly = true)
-    public List<UsuarioModel> getByPriority(Integer prioridad) {
-        return usuarioRepository.findByPrioridad(prioridad);
+    public List<UsuarioModel> getByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
     /**
@@ -91,6 +92,22 @@ public class UsuarioService {
     public boolean deleteUser(Long id) {
         try {
             usuarioRepository.deleteById(id);
+            return true;
+        } catch (Exception err) {
+            return false;
+        }
+    }
+
+    /**
+     * Método para eliminar un usuario por email
+     *
+     * @param email String
+     * @return boolean
+     */
+    public boolean deleteUserByEmail(String email) {
+        try {
+            ArrayList<UsuarioModel> usuarioModel = usuarioRepository.findByEmail(email);
+            usuarioRepository.deleteById(usuarioModel.get(0).getId());
             return true;
         } catch (Exception err) {
             return false;
