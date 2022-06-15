@@ -16,11 +16,13 @@ import java.util.ArrayList;
 @Repository
 public interface UsuarioRepository extends CrudRepository<UsuarioModel, Long> {
     /**
-     * Método para buscar por prioridad
+     * Método para buscar por email
      *
-     * @param prioridad Integer
+     * @param email String
      * @return ArrayList
      */
-    ArrayList<UsuarioModel> findByPrioridad(Integer prioridad);
+    ArrayList<UsuarioModel> findByEmail(String email);
+
+
 
 }
