@@ -121,17 +121,17 @@ public class UsuarioController {
     }
 
     /**
-     * Endpoint para obtener usuarios por prioridad
+     * Endpoint para obtener usuarios por email
      *
-     * @param prioridad Integer
+     * @param email String
      * @return Objeto Response en formato JSON
      */
     @GetMapping("/query")
-    public ResponseEntity<Response> getUserByPriority(@RequestParam("priority") Integer prioridad) {
+    public ResponseEntity<Response> getUserByEmail(@RequestParam("email") String email) {
         response.restart();
         try {
-            response.data = usuarioService.getByPriority(prioridad);
-            response.message = "Usuarios filtrados por prioridad: " + prioridad;
+            response.data = usuarioService.getByEmail(email);
+            response.message = "Usuarios filtrados por email: " + email;
             httpStatus = HttpStatus.OK;
         } catch (DataAccessException exception) {
             getErrorMessageForResponse(exception);
@@ -210,4 +210,29 @@ public class UsuarioController {
         return new ResponseEntity<>(response, httpStatus);
     }
 
+    /**
+     * Endpoint para eliminar usuario por email
+     *
+     * @param email String
+     * @return Objeto Response en formato JSON
+     */
+    @DeleteMapping(path = "/email/{email}")
+    public ResponseEntity<Response> eliminarPorEmail(@PathVariable("email") String email) {
+        response.restart();
+        try {
+            response.data = usuarioService.deleteUserByEmail(email);
+            if (response.data == null) {
+                response.message = "El email no existe";
+                httpStatus = HttpStatus.NOT_FOUND;
+            } else {
+                response.message = "El usuario fue eliminado exitosamente";
+                httpStatus = HttpStatus.OK;
+            }
+        } catch (DataAccessException exception) {
+            getErrorMessageForResponse(exception);
+        } catch (Exception exception) {
+            getErrorMessageInternal(exception);
+        }
+        return new ResponseEntity<>(response, httpStatus);
+    }
 }
