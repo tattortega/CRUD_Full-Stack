@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,13 @@ class UsuarioServiceTest {
         assertThat(usuarioModelBuscado.get().getId()).isEqualTo(idBuscado);
     }
 
+    @Test
+    public void testFindUserByEmail(){
+        UsuarioModel usuarioModel=new UsuarioModel("mateo", "mateo@gmail.com", 70);
+        UsuarioModel usuarioModelRegistrado = usuarioRepository.save(usuarioModel);
+        ArrayList<UsuarioModel> usuarioModelBuscado=usuarioRepository.findByEmail(usuarioModel.getEmail());
+        assertThat(usuarioModelBuscado.get(0).getEmail()).isEqualTo(usuarioModel.getEmail());
+    }
     @Test
     void testGetAllUsers() {
         List<UsuarioModel> usuarioModelList = (List<UsuarioModel>) usuarioRepository.findAll();
